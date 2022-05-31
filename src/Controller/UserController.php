@@ -15,13 +15,14 @@ class UserController extends AbstractController
 {
     private $doctrine;
     private $em;
-    
+
     public function __construct(EntityManagerInterface $em, ManagerRegistry $doctrine)
-   
+
     {
         $this->em = $em;
         $this->doctrine = $doctrine;
     }
+
 
     /**
      * @Route("/users", name="user_list")
@@ -42,14 +43,14 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            
-            
+
+
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $user->getPassword()
             );
             $user->setPassword($hashedPassword);
-            
+
 
             $this->em->persist($user);
             $this->em->flush();
@@ -65,7 +66,7 @@ class UserController extends AbstractController
     /**
      * @Route("/users/{id}/edit", name="user_edit")
      */
-    public function editAction(User $user, Request $request , UserPasswordHasherInterface $passwordHasher)
+    public function editAction(User $user, Request $request, UserPasswordHasherInterface $passwordHasher)
     {
         $form = $this->createForm(UserType::class, $user);
 
