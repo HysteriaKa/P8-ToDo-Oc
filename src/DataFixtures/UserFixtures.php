@@ -10,31 +10,42 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture
 {
-    
+
     protected $hashPwd;
 
-    public function __construct(UserPasswordHasherInterface $hashPwd){
+    public function __construct(UserPasswordHasherInterface $hashPwd)
+    {
 
         $this->hashPwd = $hashPwd;
     }
-    
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-
-        for ($i = 1; $i <= 12; $i++) {
-            $user = (new User());
-            $hash = $this->hashPwd->hashPassword($user, $faker->password());
-            $user->setUsername($faker->userName())
+        $usersData  = [
+            [
+                'id' => 1,
+                'password' => $faker->password(),
+                'username' => $faker->userName(),
+                'roles' => ['ROLE_ADMIN'],
+            ],
+            [
+                'id' => 2,
+                'password' => $faker->password(),
+                'username' => $faker->userName(),
+                'roles' => ['ROLE_USER'],
+            ]
+        ];
+        foreach ($usersData as $userData) {
+            $user = new User();
+            $hash = $this->hashPwd->hashPassword($user, $userData['password']);
+            $user->setUsername($userData['username'])
                 ->setPassword($hash)
-                ->setEmail($user->getUsername() . '@email.com');
-           
-                if (mt_rand(1, 4) == 1) {
-                $user->setRoles(["ROLE_ADMIN"]);
-            }
+                ->setEmail($userData['username'] . '@email.com')
+                ->setRoles($userData['roles']);
+            $this->addReference('user-' . $userData['id'],$user);
             $manager->persist($user);
         }
-        
         // $manager->persist($product);
 
         $manager->flush();

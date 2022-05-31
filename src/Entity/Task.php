@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\TaskRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\TaskRepository;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -24,6 +25,15 @@ class Task
 
     #[ORM\Column(type: 'boolean')]
     private $isDone;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -81,5 +91,17 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
