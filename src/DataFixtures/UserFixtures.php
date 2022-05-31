@@ -34,6 +34,12 @@ class UserFixtures extends Fixture
                 'password' => $faker->password(),
                 'username' => $faker->userName(),
                 'roles' => ['ROLE_USER'],
+            ],
+            [
+                'id' => 3,
+                'password' => $faker->password(),
+                'username' => "anonymous",
+                'roles' => ['ROLE_USER'],
             ]
         ];
         foreach ($usersData as $userData) {
@@ -44,10 +50,21 @@ class UserFixtures extends Fixture
                 ->setEmail($userData['username'] . '@email.com')
                 ->setRoles($userData['roles']);
             $this->addReference('user-' . $userData['id'],$user);
+
             $manager->persist($user);
         }
-        // $manager->persist($product);
+       
+        for ($i=0; $i < 12; $i++) { 
+        
+        $multiUsers = new User();
+        $hash = $this->hashPwd->hashPassword($multiUsers, $faker->password());
+        $multiUsers->setUsername($faker->userName())
+        ->setPassword($hash)
+        ->setEmail($multiUsers->getUsername(). '@email.com')
+        ->setRoles(['ROLE_USER']);
 
+        $manager->persist($multiUsers);
+    }
         $manager->flush();
     }
 }
