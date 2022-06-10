@@ -25,8 +25,8 @@ class UserFixtures extends Fixture
         $usersData  = [
             [
                 'id' => 1,
-                'password' => $faker->password(),
-                'username' => $faker->userName(),
+                'password' => '123456',
+                'username' => 'karine2310',
                 'roles' => ['ROLE_ADMIN'],
             ],
             [
@@ -47,7 +47,7 @@ class UserFixtures extends Fixture
             $hash = $this->hashPwd->hashPassword($user, $userData['password']);
             $user->setUsername($userData['username'])
                 ->setPassword($hash)
-                ->setEmail($userData['username'] . '@email.com')
+                ->setEmail($userData['username'] . '@gmail.com')
                 ->setRoles($userData['roles']);
             $this->addReference('user-' . $userData['id'],$user);
 
