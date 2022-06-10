@@ -15,9 +15,9 @@ class TaskController extends AbstractController
 
     private $doctrine;
     private $em;
-    
+
     public function __construct(EntityManagerInterface $em, ManagerRegistry $doctrine)
-   
+
     {
         $this->em = $em;
         $this->doctrine = $doctrine;
@@ -27,8 +27,14 @@ class TaskController extends AbstractController
      */
     public function listAction()
     {
-        
-        return $this->render('task/list.html.twig', ['tasks' => $this->doctrine->getRepository(Task::class)->findAll()]);
+        $user = $this->getUser();
+       
+        if ($user->getRoles()[0]!== ["ROLE_USER"]) {
+            $tasks = $this->doctrine->getRepository(Task::class)->findAll();
+        }else{
+            $tasks =$this->doctrine->getRepository(Task::class)->findBy(['user'=>$user]);
+        }
+        return $this->render('task/list.html.twig', ['tasks'=>$tasks]);
     }
 
     /**
@@ -37,13 +43,14 @@ class TaskController extends AbstractController
     public function createAction(Request $request)
     {
         $task = new Task();
+        $user = $this->getUser();
         $form = $this->createForm(TaskType::class, $task);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-           
-
+        if ($form->isSubmitted() && $form->isValid()) {
+            $task->setUser($user);
+            $task->setDone(false);
             $this->em->persist($task);
             $this->em->flush();
 
@@ -64,7 +71,7 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $this->em->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
@@ -96,7 +103,7 @@ class TaskController extends AbstractController
      */
     public function deleteTaskAction(Task $task)
     {
-       
+
         $this->em->remove($task);
         $this->em->flush();
 
