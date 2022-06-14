@@ -28,13 +28,17 @@ class TaskController extends AbstractController
     public function listAction()
     {
         $user = $this->getUser();
-       
-        if ($user->getRoles()[0]!== ["ROLE_USER"]) {
-            $tasks = $this->doctrine->getRepository(Task::class)->findAll();
-        }else{
-            $tasks =$this->doctrine->getRepository(Task::class)->findBy(['user'=>$user]);
+        if (!empty($user)) {
+
+            if (in_array('ROLE_ADMIN',$user->getRoles()) ) {
+                $tasks = $this->doctrine->getRepository(Task::class)->findAll();
+            } else {
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user]);
+                
+            }
         }
-        return $this->render('task/list.html.twig', ['tasks'=>$tasks]);
+       
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
 
     /**
