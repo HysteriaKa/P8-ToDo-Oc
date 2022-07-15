@@ -50,6 +50,12 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
                 'user-id' => 3,
                 'done' => false
             ],
+            [
+                'title' => $faker->sentence($nbWords = 18, $variableNbWords = true),
+                'content' => $faker->sentence($nbWords = 42, $variableNbWords = true),
+                'user-id' => 4,
+                'done' => false
+            ],
 
         ];
         foreach ($tasksData as $taskData) {

@@ -71,8 +71,12 @@ class TaskController extends AbstractController
      */
     public function editAction(Task $task, Request $request)
     {
+        $user = $this->getUser();
+        if ($user->getId() !== $task->getUser()->getId() && !in_array('ROLE_ADMIN',$user->getRoles())) {
+          
+            return $this->redirectToRoute('redirect_nonAuthorised');
+        }
         $form = $this->createForm(TaskType::class, $task);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -108,6 +112,11 @@ class TaskController extends AbstractController
     public function deleteTaskAction(Task $task)
     {
 
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())
+        && $task->getUser()->getId() !== $this->getUser()->getId()) {
+            return $this->redirectToRoute('redirect_nonAuthorised');
+        }
+
         $this->em->remove($task);
         $this->em->flush();
 
@@ -115,4 +124,12 @@ class TaskController extends AbstractController
 
         return $this->redirectToRoute('task_list');
     }
+      /**
+     * @Route("/redirect/NonAuthorised", name="redirect_nonAuthorised")
+     */
+    public function nonAuthorised(){
+
+        return $this->render('redirect/NonAuthorised.html.twig');
+    }
+
 }

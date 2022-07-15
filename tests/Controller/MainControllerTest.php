@@ -3,10 +3,13 @@
 namespace App\Tests\Controller;
 
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+
+use Symfony\Component\HTTPFoundation\Request;
+use Symfony\Component\HTTPFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+
+
 
 class MainControllerTest extends WebTestCase
 {
@@ -15,17 +18,17 @@ class MainControllerTest extends WebTestCase
     public function setUp(): void
     {
         $this->client = static::createClient();
+        $this->userRepository =$this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(User::class);
+        $this->user =$this->userRepository->findOneByEmail('karine2310@gmail.com');
+        $this->urlGenerator = $this->client->getContainer()->get('router.default');
+        $this->client->loginUser($this->user);
     }
 
     public function testHomeIsUp()
     {
-        
-        $userRepository = $this->client->getContainer()->get('doctrine.orm.entity_manager')->getRepository(User::class);
-        
-        $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
-        $urlGenerator = $this->client->getContainer()->get('router.default');
-        $this->client->loginUser($testUser);
-        $this->client->request(Request::METHOD_GET, $urlGenerator->generate('app_home'));
+        $this->client->request('GET', $this->urlGenerator->generate('app_home'));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $this->assertSelectorTextContains('h1','Bienvenue sur Todo List, l\'application vous permettant de gérer l\'ensemble de vos tâches sans effort !');
     }
+
 }
