@@ -25,15 +25,15 @@ class TaskController extends AbstractController
     /**
      * @Route("/tasks", name="task_list")
      */
-    public function listAction()
+    public function listActionTodo()
     {
         $user = $this->getUser();
         if (!empty($user)) {
 
             if (in_array('ROLE_ADMIN',$user->getRoles()) ) {
-                $tasks = $this->doctrine->getRepository(Task::class)->findAll();
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['isDone'=>0]);
             } else {
-                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user]);
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user,'isDone'=>0]);
                 
             }
         }
