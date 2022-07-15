@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -29,35 +30,48 @@ class UserController extends AbstractController
      */
     public function listAction()
     {
+
+        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())) {
+            return $this->redirectToRoute('redirect_nonAuthorised');
+        }
         return $this->render('user/list.html.twig', ['users' => $this->doctrine->getRepository(User::class)->findAll()]);
     }
 
     /**
      * @Route("/users/create", name="user_create")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function createAction(Request $request, UserPasswordHasherInterface $passwordHasher)
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+        $admin = $this->getUser();
+        if (!empty($admin)) {
 
-        $form->handleRequest($request);
+            if (in_array('ROLE_ADMIN', $admin->getRoles())) {
+                $user = new User();
+                $form = $this->createForm(UserType::class, $user);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+                $form->handleRequest($request);
 
-
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword()
-            );
-            $user->setPassword($hashedPassword);
+                if ($form->isSubmitted() && $form->isValid()) {
 
 
-            $this->em->persist($user);
-            $this->em->flush();
+                    $hashedPassword = $passwordHasher->hashPassword(
+                        $user,
+                        $user->getPassword()
+                    );
+                    $user->setPassword($hashedPassword);
 
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            return $this->redirectToRoute('user_list');
+                    $this->em->persist($user);
+                    $this->em->flush();
+
+                    $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+
+                    return $this->redirectToRoute('user_list');
+                }
+            } else {
+                return $this->redirectToRoute('redirect_nonAuthorised');
+            }
         }
 
         return $this->render('user/create.html.twig', ['form' => $form->createView()]);

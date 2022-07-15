@@ -28,6 +28,12 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+        <directory>src/DataFixtures</directory>
+        <directory>src/Security</directory>
+        <directory>src/Form</directory>
+        <directory>src/Repository</directory>
+        </exclude>
     </coverage>
 
     <listeners>
