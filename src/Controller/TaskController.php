@@ -40,7 +40,24 @@ class TaskController extends AbstractController
        
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
+ /**
+     * @Route("/tasks/done", name="task_list_done")
+     */
+    public function listActionDone()
+    {
+        $user = $this->getUser();
+        if (!empty($user)) {
 
+            if (in_array('ROLE_ADMIN',$user->getRoles()) ) {
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['isDone'=>1]);
+            } else {
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user,'isDone'=>0]);
+                
+            }
+        }
+       
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+    }
     /**
      * @Route("/tasks/create", name="task_create")
      */
