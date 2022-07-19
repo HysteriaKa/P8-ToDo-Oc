@@ -27,31 +27,31 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
         $users = $this->doctrine->getRepository(User::class)->findAll();
         $tasksData = [
             [
-                'title' => $faker->sentence($nbWords = 18, $variableNbWords = true),
+                'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),
                 'content' => $faker->sentence($nbWords = 42, $variableNbWords = true),
                 'user-id' => 1,
                 'done' => false
             ],
             [
-                'title' => $faker->sentence($nbWords = 18, $variableNbWords = true),
+                'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),
                 'content' => $faker->sentence($nbWords = 42, $variableNbWords = true),
                 'user-id' => 2,
                 'done' => true
             ],
             [
-                'title' => $faker->sentence($nbWords = 18, $variableNbWords = true),
+                'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),
                 'content' => $faker->sentence($nbWords = 42, $variableNbWords = true),
                 'user-id' => 2,
                 'done' => false
             ],
             [
-                'title' => $faker->sentence($nbWords = 18, $variableNbWords = true),
+                'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),
                 'content' => $faker->sentence($nbWords = 42, $variableNbWords = true),
                 'user-id' => 3,
                 'done' => false
             ],
             [
-                'title' => $faker->sentence($nbWords = 18, $variableNbWords = true),
+                'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),
                 'content' => $faker->sentence($nbWords = 42, $variableNbWords = true),
                 'user-id' => 4,
                 'done' => false

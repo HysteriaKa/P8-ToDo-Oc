@@ -22,25 +22,43 @@ class TaskController extends AbstractController
         $this->em = $em;
         $this->doctrine = $doctrine;
     }
+
+
     /**
      * @Route("/tasks", name="task_list")
+     */
+    public function listActionAll()
+    {
+        $user = $this->getUser();
+        if (!empty($user)) {
+
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                $tasks = $this->doctrine->getRepository(Task::class)->findAll();
+            } else {
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user]);
+            }
+        }
+
+        return $this->render('task/list.html.twig', ['tasks' => $tasks]);
+    }
+    /**
+     * @Route("/tasks/todo", name="task_list_todo")
      */
     public function listActionTodo()
     {
         $user = $this->getUser();
         if (!empty($user)) {
 
-            if (in_array('ROLE_ADMIN',$user->getRoles()) ) {
-                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['isDone'=>0]);
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['isDone' => 0]);
             } else {
-                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user,'isDone'=>0]);
-                
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user, 'isDone' => 0]);
             }
         }
-       
+
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
- /**
+    /**
      * @Route("/tasks/done", name="task_list_done")
      */
     public function listActionDone()
@@ -48,14 +66,13 @@ class TaskController extends AbstractController
         $user = $this->getUser();
         if (!empty($user)) {
 
-            if (in_array('ROLE_ADMIN',$user->getRoles()) ) {
-                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['isDone'=>1]);
+            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['isDone' => 1]);
             } else {
-                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user,'isDone'=>0]);
-                
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user, 'isDone' => 0]);
             }
         }
-       
+
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
     }
     /**
@@ -89,8 +106,8 @@ class TaskController extends AbstractController
     public function editAction(Task $task, Request $request)
     {
         $user = $this->getUser();
-        if ($user->getId() !== $task->getUser()->getId() && !in_array('ROLE_ADMIN',$user->getRoles())) {
-          
+        if ($user->getId() !== $task->getUser()->getId() && !in_array('ROLE_ADMIN', $user->getRoles())) {
+
             return $this->redirectToRoute('redirect_nonAuthorised');
         }
         $form = $this->createForm(TaskType::class, $task);
@@ -129,8 +146,10 @@ class TaskController extends AbstractController
     public function deleteTaskAction(Task $task)
     {
 
-        if (!in_array('ROLE_ADMIN', $this->getUser()->getRoles())
-        && $task->getUser()->getId() !== $this->getUser()->getId()) {
+        if (
+            !in_array('ROLE_ADMIN', $this->getUser()->getRoles())
+            && $task->getUser()->getId() !== $this->getUser()->getId()
+        ) {
             return $this->redirectToRoute('redirect_nonAuthorised');
         }
 
@@ -141,12 +160,12 @@ class TaskController extends AbstractController
 
         return $this->redirectToRoute('task_list');
     }
-      /**
+    /**
      * @Route("/redirect/NonAuthorised", name="redirect_nonAuthorised")
      */
-    public function nonAuthorised(){
+    public function nonAuthorised()
+    {
 
         return $this->render('redirect/NonAuthorised.html.twig');
     }
-
 }

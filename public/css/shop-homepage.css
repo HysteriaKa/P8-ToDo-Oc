@@ -34,10 +34,48 @@ body {
     width: 100%;
 }
 
+.mb-1{
+
+    margin-bottom: 1rem;
+}
+
+.mb-2{
+
+    margin-bottom: 2rem;
+}
+
+.mt-2{
+
+    margin-top: 2rem;
+}
+
+.absolute {
+
+    position:absolute;
+}
+
+.fa-check{
+    color:aquamarine;
+}
+
+.fa-circle-xmark{
+    color:coral;
+}
 .ratings {
     padding-right: 10px;
     padding-left: 10px;
     color: #d17581;
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: #550c6f;
+    border-color: #6e0576;
+}
+.btn-perso {
+    color: #fff;
+    background-color: #efa22e;
+    border-color: #a8610a;
 }
 
 .thumbnail {

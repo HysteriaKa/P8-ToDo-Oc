@@ -36,16 +36,14 @@
 
         <!-- Page Content -->
         <div class="container">
-            <div class="row">
+            <div class="row mb-2">
                 {% if app.user %}
-                    {% if is_granted('ROLE_ADMIN') %}
-                <a href="{{ path('user_create') }}" class="btn btn-primary">Créer un utilisateur</a>
-                {% endif %}
-                <a href="{{ path('app_logout') }}" class="pull-right btn btn-danger">Se déconnecter</a>
+              
+                <a href="{{ path('app_logout') }}" class="pull-right btn btn-lg btn-danger">Se déconnecter</a>
                 {% endif %}
 
                 {% if not app.user and 'login' != app.request.attributes.get('_route') %}
-                <a href="{{ path('app_login') }}" class="btn btn-success">Se connecter</a>
+                <a href="{{ path('app_login') }}" class="btn btn-lg btn-success">Se connecter</a>
                 {% endif %}
             </div>
 
@@ -93,5 +91,6 @@
 
         <script src="{{ asset('js/jquery.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="https://kit.fontawesome.com/6e28c03334.js" crossorigin="anonymous"></script>
     </body>
 </html>
