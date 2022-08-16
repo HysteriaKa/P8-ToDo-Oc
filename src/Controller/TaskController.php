@@ -14,12 +14,12 @@ class TaskController extends AbstractController
 {
 
     private $doctrine;
-    private $em;
+    private $entityManager;
 
-    public function __construct(EntityManagerInterface $em, ManagerRegistry $doctrine)
+    public function __construct(EntityManagerInterface $entityManager, ManagerRegistry $doctrine)
 
     {
-        $this->em = $em;
+        $this->entityManager = $entityManager;
         $this->doctrine = $doctrine;
     }
 
@@ -89,8 +89,8 @@ class TaskController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $task->setUser($user);
             $task->setDone(false);
-            $this->em->persist($task);
-            $this->em->flush();
+            $this->entityManager->persist($task);
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
 
@@ -114,7 +114,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
+            $this->entityManager->flush();
 
             $this->addFlash('success', 'La tâche a bien été modifiée.');
 
@@ -133,7 +133,7 @@ class TaskController extends AbstractController
     public function toggleTaskAction(Task $task)
     {
         $task->toggle(!$task->isDone());
-        $this->em->flush();
+        $this->entityManager->flush();
 
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
 
@@ -153,8 +153,8 @@ class TaskController extends AbstractController
             return $this->redirectToRoute('redirect_nonAuthorised');
         }
 
-        $this->em->remove($task);
-        $this->em->flush();
+        $this->entityManager->remove($task);
+        $this->entityManager->flush();
 
         $this->addFlash('success', 'La tâche a bien été supprimée.');
 

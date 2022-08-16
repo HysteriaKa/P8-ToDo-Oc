@@ -11,12 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class SecurityControllerTest extends WebTestCase
 {
     private KernelBrowser|null $client = null;
-    private EntityManager $em;
+    // private EntityManager $entityManager;
     public function setUp(): void
     {
         $this->client = static::createClient();
         
-        $this->em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+        $this->entityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
     }
     public function testDisplayLogin()
     {

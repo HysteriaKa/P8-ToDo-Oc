@@ -24,7 +24,7 @@ class TaskFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $users = $this->doctrine->getRepository(User::class)->findAll();
+        $this->doctrine->getRepository(User::class)->findAll();
         $tasksData = [
             [
                 'title' => $faker->sentence($nbWords = 10, $variableNbWords = true),

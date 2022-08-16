@@ -11,18 +11,18 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class TaskControllerTest extends WebTestCase
 {
     private KernelBrowser|null $client = null;
-    private EntityManager $em;
+    private EntityManager $entityManager;
     public function setUp(): void
     {
         $this->client = static::createClient();
         
-        $this->em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+        $this->entityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
     }
     public function testAdmin(): void
     {
 
-        $userRepository = $this->em->getRepository(User::class);
-        $taskRepository = $this->em->getRepository(Task::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         $user = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
         $task = $taskRepository->findOneBy(['user' => $user]);
@@ -37,8 +37,8 @@ class TaskControllerTest extends WebTestCase
     public function testUser(): void
     {
 
-        $userRepository = $this->em->getRepository(User::class);
-        $taskRepository = $this->em->getRepository(Task::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
         $user = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
         $task = $taskRepository->findOneBy(['user' => $user]);
@@ -56,7 +56,7 @@ class TaskControllerTest extends WebTestCase
     public function testAddTask()
     {
 
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/tasks/create');
@@ -66,16 +66,16 @@ class TaskControllerTest extends WebTestCase
             'task[content]' => 'Description tâche test'
         ]);
         $this->client->submit($form);
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['title' => 'Test tâche']);
         $this->assertInstanceOf(Task::class,$task);
         $this->assertEquals($testUser->getId(),$task->getUser()->getId());
     }
 
     public function testEditTask(){
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$testUser]);
         
         $this->client->loginUser($testUser);
@@ -93,10 +93,10 @@ class TaskControllerTest extends WebTestCase
     }
 
     public function testTaskEditTaskByAnother(){
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
         $user = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$user]);
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/tasks/'.$task->getId().'/edit');
@@ -104,11 +104,11 @@ class TaskControllerTest extends WebTestCase
 
     }
     public function testTaskEditTaskAdmin(){
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         $user = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
         
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$user]);
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/tasks/'.$task->getId().'/edit');
@@ -116,9 +116,9 @@ class TaskControllerTest extends WebTestCase
 
     }
     public function testDeleteTaskIsSuccessful(){
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$testUser]);
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/tasks/'.$task->getId().'/delete');
@@ -129,9 +129,9 @@ class TaskControllerTest extends WebTestCase
 
     }
     public function testDeleteTaskAnonymousIfAdmin(){
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$userRepository->findOneBy(['username'=>'anonymous'])]);
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/tasks/'.$task->getId().'/delete');
@@ -142,9 +142,9 @@ class TaskControllerTest extends WebTestCase
 
     }
     public function testDeleteTaskAnonymousIfNotAdmin(){
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
-        $taskRepository = $this->em->getRepository(Task::class);
+        $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$userRepository->findOneBy(['username'=>'anonymous'])]);
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/tasks/'.$task->getId().'/delete');
