@@ -34,9 +34,9 @@ class TaskController extends AbstractController
 
             if (in_array('ROLE_ADMIN', $user->getRoles())) {
                 $tasks = $this->doctrine->getRepository(Task::class)->findAll();
-            } else {
-                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user]);
             }
+                $tasks = $this->doctrine->getRepository(Task::class)->findBy(['user' => $user]);
+            
         }
 
         return $this->render('task/list.html.twig', ['tasks' => $tasks]);
