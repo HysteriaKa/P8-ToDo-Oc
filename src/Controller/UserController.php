@@ -15,12 +15,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class UserController extends AbstractController
 {
     private $doctrine;
-    private $em;
+    private $entityManager;
 
-    public function __construct(EntityManagerInterface $em, ManagerRegistry $doctrine)
+    public function __construct(EntityManagerInterface $entityManager, ManagerRegistry $doctrine)
 
     {
-        $this->em = $em;
+        $this->entityManager = $entityManager;
         $this->doctrine = $doctrine;
     }
 
@@ -48,6 +48,7 @@ class UserController extends AbstractController
 
             if (in_array('ROLE_ADMIN', $admin->getRoles())) {
                 $user = new User();
+                
                 $form = $this->createForm(UserType::class, $user);
 
                 $form->handleRequest($request);
@@ -60,10 +61,9 @@ class UserController extends AbstractController
                         $user->getPassword()
                     );
                     $user->setPassword($hashedPassword);
-
-
-                    $this->em->persist($user);
-                    $this->em->flush();
+                    // dd($user);
+                    $this->entityManager->persist($user);
+                    $this->entityManager->flush();
 
                     $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
@@ -93,7 +93,7 @@ class UserController extends AbstractController
             );
             $user->setPassword($hashedPassword);
 
-            $this->em->flush();
+            $this->entityManager->flush();
 
             $this->addFlash('success', "L'utilisateur a bien été modifié");
 

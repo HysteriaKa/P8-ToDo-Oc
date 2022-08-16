@@ -12,13 +12,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class UserControllerTest extends WebTestCase
 {
     private KernelBrowser|null $client = null;
-    private EntityManager $em;
+    private EntityManager $entityManager;
 
     public function setUp(): void
     {
         $this->client = static::createClient();
         $this->urlGenerator = $this->client->getContainer()->get('router');
-        $this->em = $this->client->getContainer()->get('doctrine.orm.entity_manager');
+        $this->entityManager = $this->client->getContainer()->get('doctrine.orm.entity_manager');
     }
 
 
@@ -26,7 +26,7 @@ class UserControllerTest extends WebTestCase
     public function testCreateUserNotAdmin()
     {
 
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         // $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         //On connecte le user (admin)  
         // $this->client->loginUser($testUser);
@@ -39,7 +39,7 @@ class UserControllerTest extends WebTestCase
 
     public function testCreateUser()
     {
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         $this->client->loginUser($testUser);
         $crawler = $this->client->request('GET', '/users/create');
@@ -65,7 +65,7 @@ class UserControllerTest extends WebTestCase
     public function testManageUsersNotAdmin()
     {
 
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         // $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         //On connecte le user (admin)  
         // $this->client->loginUser($testUser);
@@ -78,7 +78,7 @@ class UserControllerTest extends WebTestCase
     public function testManageUsersAdmin()
     {
 
-        $userRepository = $this->em->getRepository(User::class);
+        $userRepository = $this->entityManager->getRepository(User::class);
         // $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
         //On connecte le user (admin)  
         // $this->client->loginUser($testUser);
