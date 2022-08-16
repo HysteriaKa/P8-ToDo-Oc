@@ -1,5 +1,5 @@
 # TODO LIST P8
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/HysteriaKa/P8-ToDo-Oc/main)  
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/HysteriaKa/P8-ToDo-Oc/master)  
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/caf1b89dee7d45ff82ed3e49ee92965a)](https://www.codacy.com/gh/HysteriaKa/P8-ToDo-Oc/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=HysteriaKa/P8-ToDo-Oc&amp;utm_campaign=Badge_Grade)
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=HysteriaKa_P8-ToDo-Oc&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=HysteriaKa_P8-ToDo-Oc)
