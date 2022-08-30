@@ -62,12 +62,12 @@ class TaskControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/tasks/create');
         $this->assertResponseIsSuccessful();
         $form = $crawler->selectButton('Ajouter')->form([
-            'task[title]' => 'Test tâche',
+            'task[title]' => 'Still testing again',
             'task[content]' => 'Description tâche test'
         ]);
         $this->client->submit($form);
         $taskRepository = $this->entityManager->getRepository(Task::class);
-        $task = $taskRepository->findOneBy(['title' => 'Test tâche']);
+        $task = $taskRepository->findOneBy(['title' => 'Still testing again']);
         $this->assertInstanceOf(Task::class,$task);
         $this->assertEquals($testUser->getId(),$task->getUser()->getId());
     }
