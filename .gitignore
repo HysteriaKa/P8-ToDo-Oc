@@ -19,7 +19,8 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
-
+/reports
+/test-coverage
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/

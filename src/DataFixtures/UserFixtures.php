@@ -31,14 +31,20 @@ class UserFixtures extends Fixture
             ],
             [
                 'id' => 2,
-                'password' => $faker->password(),
-                'username' => $faker->userName(),
+                'password' => "123456",
+                'username' => "anonymous",
                 'roles' => ['ROLE_USER'],
             ],
             [
                 'id' => 3,
-                'password' => $faker->password(),
-                'username' => "anonymous",
+                'password' => "123456",
+                'username' =>"henriette.dumas",
+                'roles' => ['ROLE_USER'],
+            ],
+            [
+                'id' => 4,
+                'password' => "123456",
+                'username' => "alphonse.richard",
                 'roles' => ['ROLE_USER'],
             ]
         ];

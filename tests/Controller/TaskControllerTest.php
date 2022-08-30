@@ -39,7 +39,7 @@ class TaskControllerTest extends WebTestCase
 
         $userRepository = $this->entityManager->getRepository(User::class);
         $taskRepository = $this->entityManager->getRepository(Task::class);
-        $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
+        $testUser = $userRepository->findOneByEmail('alphonse.richard@gmail.com');
         $user = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
         $task = $taskRepository->findOneBy(['user' => $user]);
 
@@ -74,7 +74,7 @@ class TaskControllerTest extends WebTestCase
 
     public function testEditTask(){
         $userRepository = $this->entityManager->getRepository(User::class);
-        $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
+        $testUser = $userRepository->findOneByEmail('alphonse.richard@gmail.com');
         $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$testUser]);
         
@@ -94,7 +94,7 @@ class TaskControllerTest extends WebTestCase
 
     public function testTaskEditTaskByAnother(){
         $userRepository = $this->entityManager->getRepository(User::class);
-        $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
+        $testUser = $userRepository->findOneByEmail('alphonse.richard@gmail.com');
         $user = $userRepository->findOneByEmail('henriette.dumas@gmail.com');
         $taskRepository = $this->entityManager->getRepository(Task::class);
         $task = $taskRepository->findOneBy(['user' =>$user]);

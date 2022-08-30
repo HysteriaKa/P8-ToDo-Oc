@@ -31,7 +31,7 @@ class UserControllerTest extends WebTestCase
         //On connecte le user (admin)  
         // $this->client->loginUser($testUser);
         //on se rend sur la page de creation d un user
-        $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
+        $testUser = $userRepository->findOneByEmail('alphonse.richard@gmail.com');
         $this->client->loginUser($testUser);
         $this->client->request('GET', '/users/create');
         $this->assertResponseStatusCodeSame(403);
@@ -70,7 +70,7 @@ class UserControllerTest extends WebTestCase
         //On connecte le user (admin)  
         // $this->client->loginUser($testUser);
         //on se rend sur la page de creation d un user
-        $testUser = $userRepository->findOneByEmail('alphonse.richard@email.com');
+        $testUser = $userRepository->findOneByEmail('alphonse.richard@gmail.com');
         $this->client->loginUser($testUser);
         $this->client->request('GET', '/users');
         $this->assertResponseRedirects(('/redirect/NonAuthorised'));
