@@ -21,7 +21,8 @@
 ###< phpunit/phpunit ###
 /reports
 /test-coverage
-/public/codecoverage
+/public/test-codecoverage
+
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/
