@@ -75,6 +75,7 @@ class UserControllerTest extends WebTestCase
         $this->client->request('GET', '/users');
         $this->assertResponseRedirects(('/redirect/NonAuthorised'));
     }
+
     public function testManageUsersAdmin()
     {
 
@@ -87,6 +88,31 @@ class UserControllerTest extends WebTestCase
         $this->client->loginUser($testUser);
         $this->client->request('GET', '/users');
         $this->assertResponseIsSuccessful();
+    }
+    public function testEditUser()
+    {
+        $userRepository = $this->entityManager->getRepository(User::class);
+        $testUser = $userRepository->findOneByEmail('karine2310@gmail.com');
+        $this->client->loginUser($testUser);
+        $userToEdit =$userRepository->findOneByEmail('alphonse.richard@gmail.com');
+        $crawler = $this->client->request('GET', '/users/'.$userToEdit->getId().'/edit');
+        $this->assertEquals(
+            Response::HTTP_OK,
+            $this->client->getResponse()->getStatusCode()
+        );
+        // $this->assertResponseIsSuccessful();
+        $form = $crawler->selectButton('Modifier')->form([
+            'user[username]' => 'Tartenpion',
+            'user[Roles]' => 'ROLE_ADMIN',
+            'user[password][first]' => '123456',
+            'user[password][second]' => '123456'
+        ]);
+        $this->client->submit($form);
+        $this->assertResponseRedirects();
+        $crawler = $this->client->followRedirect();
+        $this->assertSelectorExists('.alert.alert-success');
+        
+        
     }
 
 }
