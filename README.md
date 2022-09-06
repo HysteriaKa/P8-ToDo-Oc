@@ -61,6 +61,7 @@ php bin/console doctrine:fixtures:load
 ## Usage
 
 To run tests, you also need __PHPUnit__. See requirements in [PHPUnit documentation - EN](https://phpunit.readthedocs.io/en/latest/installation.html#requirements) / [FR](https://phpunit.readthedocs.io/fr/latest/installation.html#pre-requis)  
+You could need XDEBUG if you don't have it yet if you want to run tests and see coverage.
 
 
 
